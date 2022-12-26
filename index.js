@@ -1,20 +1,19 @@
-import { URL } from "node:url";
+import http from "node:http";
 
-const http = require("node:http");
+import { handle as handleNonExistingRequests } from "./error-requests-handler.js";
+import { handle as handleUserRequests } from "./user-requests-handler.js";
 
 const server = http.createServer();
 
-server.on("request", (request, res) => {
-  const url = new URL(request.url, `http://${request.headers.host}`);
-
-  res.writeHead(200, { "Content-Type": "application/json" });
-  res.end(
-    JSON.stringify({
-      data: "Hello World!",
-    })
+const addRequestHandlers = (server) => {
+  return [handleUserRequests, handleNonExistingRequests].reduce(
+    (result, handler) => {
+      return handler(result);
+    },
+    server
   );
-});
+};
 
-server.listen(8000, () => {
-  console.log(`Server's listening ${8080} port`);
+addRequestHandlers(server).listen(8000, () => {
+  console.log(`Server's listening ${8000} port`);
 });
