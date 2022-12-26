@@ -2,7 +2,7 @@ export class UserRepository {
   _db;
 
   constructor(db) {
-    _db = db.createSegment("Users");
+    this._db = db.getOrCreateSegment("Users");
   }
 
   getById(id) {
