@@ -5,7 +5,7 @@
   "description": "This is repo for rs school's crud api task.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/antontrafimovich/crud-api/issues"
   },
-  "homepage": "https://github.com/antontrafimovich/crud-api#readme"
+  "homepage": "https://github.com/antontrafimovich/crud-api#readme",
+  "dependencies": {
+    "uuid": "^9.0.0"
+  }
 }
