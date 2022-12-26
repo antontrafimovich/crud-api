@@ -1,3 +1,9 @@
 import { getDbByType } from "./db/index.js";
 
-export const db = getDbByType("inmemory");
+let db = getDbByType("inmemory");
+
+export const setDb = (type) => {
+  db = getDbByType(type);
+};
+
+export default db;

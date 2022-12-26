@@ -1,25 +1,44 @@
-class DbSegment {
-  get() {}
+import { generateUid } from "./../utils/index.js";
 
-  getById() {}
+class InmemoryDbSegment {
+  _storage = [];
 
-  create() {}
+  getAll() {
+    return [...this._storage];
+  }
 
-  update() {}
+  getById(id) {
+    return this._storage.find((item) => item.id === id);
+  }
 
-  delete() {}
+  create(record) {
+    this._storage.push({
+      id: generateUid(),
+      ...record,
+    });
+  }
+
+  update(record) {
+    this._storage = this._storage.map((item) =>
+      item.id === record.id ? record : item
+    );
+  }
+
+  delete(id) {
+    this._storage = this._storage.filter((item) => item.id === id);
+  }
 }
 
 export class InmemoryDb {
   _segments = {};
 
-  createSegment(name) {
-    this._segments[name] = new DbSegment();
+  getOrCreateSegment(name) {
+    if (this._segments[name]) {
+      return this._segments[name];
+    }
 
-    return this._segments[name];
-  }
+    this._segments[name] = new InmemoryDbSegment();
 
-  getSegmentByName(name) {
     return this._segments[name];
   }
 }
