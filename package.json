@@ -1,0 +1,21 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "This is repo for rs school's crud api task.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antontrafimovich/crud-api.git"
+  },
+  "keywords": [],
+  "author": "Anton Trafimovich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antontrafimovich/crud-api/issues"
+  },
+  "homepage": "https://github.com/antontrafimovich/crud-api#readme"
+}
