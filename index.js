@@ -1,16 +1,19 @@
 import http from "node:http";
 
-import { handle as handleNonExistingRequests } from "./error-requests-handler.js";
-import { handle as handleUserRequests } from "./user-requests-handler.js";
+import {
+  UserRequestsHanlder,
+  NotExistingRequestsHandler,
+} from "./handlers/index.js";
 
 const server = http.createServer();
 
 const addRequestHandlers = (server) => {
-  return [handleUserRequests, handleNonExistingRequests].reduce(
-    (result, handler) => {
-      return handler(result);
-    },
-    server
+  const notExistingRequestHandler = new NotExistingRequestsHandler();
+  const requestHandlers = new UserRequestsHanlder(notExistingRequestHandler);
+
+  return server.on(
+    "request",
+    async (req, res) => await requestHandlers.handle(req, res)
   );
 };
 
