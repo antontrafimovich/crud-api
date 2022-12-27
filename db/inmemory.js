@@ -12,10 +12,14 @@ class InmemoryDbSegment {
   }
 
   create(record) {
-    this._storage.push({
+    const newRecord = {
       id: generateUid(),
       ...record,
-    });
+    };
+
+    this._storage.push(newRecord);
+
+    return newRecord;
   }
 
   update(record) {
