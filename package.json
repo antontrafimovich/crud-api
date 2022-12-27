@@ -5,7 +5,7 @@
   "description": "This is repo for rs school's crud api task.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
