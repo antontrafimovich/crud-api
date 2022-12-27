@@ -14,7 +14,7 @@ export class UserRepository {
   }
 
   add(name, age, hobbies) {
-    return this._db.add({ name, age, hobbies });
+    return this._db.create({ name, age, hobbies });
   }
 
   delete(id) {
@@ -22,6 +22,6 @@ export class UserRepository {
   }
 
   edit(id, user) {
-    return this._db.edit(id, user);
+    return this._db.update(id, user);
   }
 }
