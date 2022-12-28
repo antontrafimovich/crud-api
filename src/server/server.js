@@ -1,9 +1,9 @@
 import http from "node:http";
 import process from "node:process";
-import cluster from "node:cluster";
 
 import {
-  UserRequestsHanlder,
+  CreateUserRequestHanlder,
+  GetUsersRequestHanlder,
   NotExistingRequestsHandler,
 } from "./handlers/index.js";
 
@@ -11,7 +11,10 @@ const server = http.createServer();
 
 const addRequestHandlers = (server) => {
   const notExistingRequestHandler = new NotExistingRequestsHandler();
-  const requestHandlers = new UserRequestsHanlder(notExistingRequestHandler);
+  const createUserRequesHandler = new CreateUserRequestHanlder(
+    notExistingRequestHandler
+  );
+  const requestHandlers = new GetUsersRequestHanlder(createUserRequesHandler);
 
   return server.on(
     "request",
