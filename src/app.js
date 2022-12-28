@@ -4,11 +4,17 @@ import { cpus } from "node:os";
 import "./db-server/index.js";
 
 import http from "node:http";
+import { pipeline } from "node:stream/promises";
+import path from "node:path";
+import { fileURLToPath, URL } from "node:url";
 
 const cpusCount = cpus().length;
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 cluster.setupPrimary({
-  exec: "server/server.js",
+  exec: path.resolve(__dirname, "./server/server.js"),
 });
 
 for (let i = 0; i < cpusCount; i++) {
@@ -16,7 +22,15 @@ for (let i = 0; i < cpusCount; i++) {
 }
 
 const server = http.createServer((req, res) => {
-  http.request("http://localhost:8001");
+  const url = new URL(req.url, "http://localhost:8001");
+
+  const request = http.request(url, { method: req.method }, (response) => {
+    pipeline(response, res);
+  });
+
+  if (req.method === "POST") {
+    req.pipe(request);
+  }
 });
 
 server.listen(8000, () => {
