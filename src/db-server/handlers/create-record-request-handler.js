@@ -23,14 +23,13 @@ export class CreateRecordRequestHandler {
 
     const segment = url.pathname.slice(1);
 
-    const rawData = await streamToPromise(req);
-
-    const record = JSON.parse(rawData);
-
     if (!storage[segment]) {
       res.writeHead(500);
-      res.end(`There no such a segment ${segment}`);
+      res.end(`There's no such a segment ${segment}`);
     }
+
+    const rawData = await streamToPromise(req);
+    const { record } = JSON.parse(rawData);
 
     store.trigger({ type: "CREATE", payload: { segment, record } });
 
