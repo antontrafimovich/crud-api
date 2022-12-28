@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 cluster.setupPrimary({
-  exec: path.resolve(__dirname, "./server/server.js"),
+  exec: path.resolve(__dirname, "./server/index.js"),
 });
 
 for (let i = 0; i < cpusCount; i++) {
