@@ -1,4 +1,4 @@
-import { generateUid } from "./../utils/index.js";
+import { generateUid } from "../../utils/index.js";
 
 class InmemoryDbSegment {
   _storage = [];

@@ -1,9 +1,13 @@
 import { getDbByType } from "./db/index.js";
+import process from "node:process";
 
 class Store {
   constructor() {
     this.state = {
-      db: getDbByType("inmemory"),
+      db: getDbByType(
+        process.env.AT_DB_URL ? "remote" : "inmemory",
+        process.env.AT_DB_URL
+      ),
     };
 
     this.reducers = [

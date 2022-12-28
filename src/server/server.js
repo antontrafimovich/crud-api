@@ -1,4 +1,6 @@
 import http from "node:http";
+import process from "node:process";
+import cluster from "node:cluster";
 
 import {
   UserRequestsHanlder,
@@ -17,6 +19,6 @@ const addRequestHandlers = (server) => {
   );
 };
 
-addRequestHandlers(server).listen(8000, () => {
-  console.log(`Server's listening ${8000} port`);
+addRequestHandlers(server).listen(process.env.PORT, () => {
+  console.log(`Server's listening ${process.env.PORT} port`);
 });
