@@ -18,7 +18,7 @@ export class CreateUserRequestHanlder {
   async handle(req, res) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 
-    if (!url.pathname !== "/api/users" || req.method !== "POST") {
+    if (url.pathname !== "/api/users" || req.method !== "POST") {
       return this._next.handle(req, res);
     }
 
