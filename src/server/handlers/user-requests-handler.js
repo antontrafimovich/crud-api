@@ -23,7 +23,7 @@ export class UserRequestsHanlder {
     }
 
     if (req.method === "GET" && url.pathname === "/api/users") {
-      const users = repo.getAll();
+      const users = await repo.getAll();
 
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(
@@ -40,7 +40,7 @@ export class UserRequestsHanlder {
 
       const { name, age, hobbies } = JSON.parse(body);
 
-      const result = repo.add(name, age, hobbies);
+      const result = await repo.add(name, age, hobbies);
 
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(
@@ -49,7 +49,7 @@ export class UserRequestsHanlder {
         })
       );
 
-      return
+      return;
     }
 
     res.writeHead(200, { "Content-Type": "application/json" });

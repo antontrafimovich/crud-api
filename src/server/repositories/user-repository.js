@@ -5,23 +5,23 @@ export class UserRepository {
     this._db = db.getOrCreateSegment("Users");
   }
 
-  getById(id) {
-    return this._db.getById(id);
+  async getById(id) {
+    return await (await this._db).getById(id);
   }
 
-  getAll() {
-    return this._db.getAll();
+  async getAll() {
+    return await (await this._db).getAll();
   }
 
-  add(name, age, hobbies) {
-    return this._db.create({ name, age, hobbies });
+  async add(name, age, hobbies) {
+    return await (await this._db).create({ name, age, hobbies });
   }
 
-  delete(id) {
-    return this._db.delete(id);
+  async delete(id) {
+    return await (await this._db).delete(id);
   }
 
-  edit(id, user) {
-    return this._db.update(id, user);
+  async edit(id, user) {
+    return await (await this._db).update(id, user);
   }
 }
