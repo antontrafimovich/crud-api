@@ -5,7 +5,10 @@
   "description": "This is repo for rs school's crud api task.",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/server/index.js",
+    "start:dev": "node src/server/index.js",
+    "start:prod": "node src/server/index.js",
+    "start:multi": "node src/index.js"
   },
   "repository": {
     "type": "git",
