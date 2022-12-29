@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server/index.js",
-    "start:dev": "node src/server/index.js",
+    "start:dev": "nodemon src/server/index.js",
     "start:prod": "node src/server/index.js",
     "start:multi": "node src/index.js"
   },
@@ -24,5 +24,8 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
