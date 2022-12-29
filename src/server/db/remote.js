@@ -138,10 +138,15 @@ export class RemoteDb {
         method: "POST",
       });
 
-      request.on("response", (res) => {
-        if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve(new RemoteDbSegment(this._url, name));
+      request.on("response", async (res) => {
+        const data = await streamToPromise(res);
+
+        if (res.statusCode === 400 || res.statusCode === 404) {
+          reject({ statusCode: res.statusCode, message: data });
+          return;
         }
+
+        resolve(new RemoteDbSegment(this._url, name));
       });
 
       request.write(
