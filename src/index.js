@@ -25,11 +25,14 @@ const server = http.createServer((req, res) => {
   const url = new URL(req.url, "http://localhost:8001");
 
   const request = http.request(url, { method: req.method }, (response) => {
+    res.writeHead(response.statusCode, response.headers);
     pipeline(response, res);
   });
 
   if (req.method === "POST") {
     req.pipe(request);
+  } else {
+    request.end();
   }
 });
 
