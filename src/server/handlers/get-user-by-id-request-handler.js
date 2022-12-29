@@ -18,7 +18,7 @@ export class GetUserByIdRequestHanlder {
   async handle(req, res) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 
-    if (req.method !== "GET" || url.pathname.includes("/api/users")) {
+    if (req.method !== "GET" || !url.pathname.includes("/api/users")) {
       return this._next.handle(req, res);
     }
 

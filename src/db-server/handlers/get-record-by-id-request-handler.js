@@ -20,7 +20,7 @@ export class GetRecordByIdRequestHandler {
       return this._next.handle(req, res);
     }
 
-    const [segment, id] = url.pathname.slice(1);
+    const [segment, id] = url.pathname.slice(1).split("/");
 
     if (!segment || !id) {
       return this._next.handle(req, res);

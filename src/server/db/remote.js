@@ -38,14 +38,17 @@ class RemoteDbSegment {
       });
 
       request.on("response", async (res) => {
-        if (res.statusCode < 200 && res.statusCode >= 300) {
-          reject("Some error");
-        }
-
         const data = await streamToPromise(res);
 
-        resolve(data);
+        if (res.statusCode === 400 || res.statusCode === 404) {
+          reject({ statusCode: res.statusCode, message: data });
+          return;
+        }
+
+        resolve(JSON.parse(data));
       });
+
+      request.end();
     });
   }
 
@@ -56,13 +59,14 @@ class RemoteDbSegment {
       });
 
       request.on("response", async (res) => {
-        if (res.statusCode < 200 && res.statusCode >= 300) {
-          reject("Some error");
-        }
-
         const data = await streamToPromise(res);
 
-        resolve(data);
+        if (res.statusCode === 400 || res.statusCode === 404) {
+          reject({ statusCode: res.statusCode, message: data });
+          return;
+        }
+
+        resolve(JSON.parse(data));
       });
 
       request.write(
@@ -111,6 +115,7 @@ class RemoteDbSegment {
         if (res.statusCode === 400 || res.statusCode === 404) {
           const errorMessage = await streamToPromise(res);
           reject({ statusCode: res.statusCode, message: errorMessage });
+          return;
         }
 
         resolve();
