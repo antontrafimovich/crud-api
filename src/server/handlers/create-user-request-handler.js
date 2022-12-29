@@ -8,6 +8,8 @@ store.onUpdate((state) => {
   repo = new UserRepository(state.db);
 });
 
+const REQUIRED_FIELDS = ["name", "age", "hobbies"];
+
 export class CreateUserRequestHanlder {
   _next;
 
@@ -24,7 +26,19 @@ export class CreateUserRequestHanlder {
 
     const body = await streamToPromise(req);
 
-    const { name, age, hobbies } = JSON.parse(body);
+    const userParams = JSON.parse(body);
+
+    const { name, age, hobbies } = userParams;
+
+    if (!name || !age || !hobbies) {
+      const undefinedParams = REQUIRED_FIELDS.filter(
+        (field) => userParams[field] === undefined
+      );
+
+      res.writeHead(400, { "Content-Type": "text/plain" });
+      res.end(`Value for ${undefinedParams} param(s) is mandatory`);
+      return;
+    }
 
     const result = await repo.add(name, age, hobbies);
 
