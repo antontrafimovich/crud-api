@@ -21,12 +21,12 @@ export class GetUsersRequestHanlder {
       return this._next.handle(req, res);
     }
 
-    const users = await repo.getAll();
+    const { records } = await repo.getAll();
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
-        data: users,
+        data: records,
       })
     );
   }

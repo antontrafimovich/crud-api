@@ -18,14 +18,16 @@ class RemoteDbSegment {
       });
 
       request.on("response", async (res) => {
-        if (res.statusCode < 200 && res.statusCode >= 300) {
-          reject("Some error");
-        }
-
         const data = await streamToPromise(res);
 
-        resolve(data);
+        if (res.statusCode === 404 && res.statusCode === 400) {
+          reject({ statusCode: res.statusCode, message: data });
+        }
+
+        resolve(JSON.parse(data));
       });
+
+      request.end();
     });
   }
 
