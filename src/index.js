@@ -1,14 +1,15 @@
-import cluster from "node:cluster";
-import { cpus } from "node:os";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 import "./db-server/index.js";
 
-import { CycledQueue } from "./model/index.js";
-
+import cluster from "node:cluster";
 import http from "node:http";
-import { pipeline } from "node:stream/promises";
+import { cpus } from "node:os";
 import path from "node:path";
 import { fileURLToPath, URL } from "node:url";
+
+import { CycledQueue } from "./model/index.js";
 
 const cpusCount = cpus().length;
 
@@ -21,10 +22,12 @@ cluster.setupPrimary({
   exec: path.resolve(__dirname, "./server/index.js"),
 });
 
-for (let i = 0; i < cpusCount; i++) {
-  const port = 8000 + i + 1;
+const AT_CRUD_API_PORT = Number.parseInt(process.env.AT_CRUD_API_PORT);
 
-  cluster.fork({ PORT: port, AT_DB_URL: "http://localhost:1337" });
+for (let i = 0; i < cpusCount; i++) {
+  const port = AT_CRUD_API_PORT + i + 1;
+
+  cluster.fork({ AT_CRUD_API_PORT: port, AT_DB_URL: "http://localhost:1337" });
 
   queue.add(port);
 }
@@ -47,6 +50,6 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(8000, () => {
-  console.log(`Server's listening ${8000} port`);
+server.listen(AT_CRUD_API_PORT, () => {
+  console.log(`Server's listening ${AT_CRUD_API_PORT} port`);
 });

@@ -1,3 +1,6 @@
+import * as dotenv from "dotenv";
+dotenv.config();
+
 import http from "node:http";
 import process from "node:process";
 
@@ -35,6 +38,6 @@ const addRequestHandlers = (server) => {
   );
 };
 
-addRequestHandlers(server).listen(process.env.PORT, () => {
-  console.log(`Server's listening ${process.env.PORT} port`);
+addRequestHandlers(server).listen(process.env.AT_CRUD_API_PORT, () => {
+  console.log(`Server's listening ${process.env.AT_CRUD_API_PORT} port`);
 });

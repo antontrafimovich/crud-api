@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/antontrafimovich/crud-api#readme",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "uuid": "^9.0.0"
   }
 }
