@@ -32,14 +32,14 @@ export class UpdateUserRequestHanlder {
 
     const body = await streamToPromise(req);
 
-    const { name, age, hobbies } = JSON.parse(body);
+    const newUserData = JSON.parse(body);
 
-    const result = await repo.edit(id, { name, age, hobbies });
+    const { record } = await repo.edit(id, newUserData);
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
-        data: result,
+        data: record,
       })
     );
   }

@@ -37,12 +37,12 @@ class Store {
         }
 
         if (type === "UPDATE") {
-          const { segment, id, newRecord } = payload;
+          const { segment, record: newRecord } = payload;
 
           return {
             ...state,
             [segment]: state[segment].map((record) =>
-              record.id !== id ? { id, ...newRecord } : record
+              record.id === newRecord.id ? newRecord : record
             ),
           };
         }

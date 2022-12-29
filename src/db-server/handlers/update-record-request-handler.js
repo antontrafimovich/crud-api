@@ -36,7 +36,7 @@ export class UpdateRecordRequestHandler {
     }
 
     const rawData = await streamToPromise(req);
-    const { record: newRecord } = JSON.parse(rawData);
+    const { record: newRecordData } = JSON.parse(rawData);
 
     const record = storage[segment].find((item) => item.id === id);
 
@@ -46,7 +46,16 @@ export class UpdateRecordRequestHandler {
       return;
     }
 
-    store.trigger({ type: "UPDATE", payload: { segment, id, newRecord } });
+    const newRecord = {
+      ...record,
+      newRecordData,
+      id: record.id,
+    };
+
+    store.trigger({
+      type: "UPDATE",
+      payload: { segment, record: newRecord },
+    });
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
