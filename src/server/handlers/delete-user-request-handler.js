@@ -18,7 +18,7 @@ export class DeleteUserRequestHanlder {
   async handle(req, res) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 
-    if (!url.pathname.includes("/api/users") || req.method !== "DELETE") {
+    if (!url.pathname.startsWith("/api/users") || req.method !== "DELETE") {
       return this._next.handle(req, res);
     }
 

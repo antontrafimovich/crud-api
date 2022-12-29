@@ -19,7 +19,7 @@ export class CreateSegmentRequestHandler {
   async handle(req, res) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 
-    if (!url.pathname.includes("segment") || req.method !== "POST") {
+    if (!url.pathname.startsWith("/segment") || req.method !== "POST") {
       return this._next.handle(req, res);
     }
 
