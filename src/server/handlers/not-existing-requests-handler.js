@@ -6,7 +6,9 @@ export class NotExistingRequestsHandler {
   }
 
   handle(req, res) {
-    res.writeHead(404, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "some error" }));
+    const url = new URL(req.url, `http://${req.headers.host}`);
+
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end(`Resource under the route ${url.pathname} hasn't been found.`);
   }
 }

@@ -8,6 +8,7 @@ import {
   DeleteUserRequestHanlder,
   GetUserByIdRequestHanlder,
 } from "./handlers/index.js";
+import { UpdateUserRequestHanlder } from "./handlers/update-user-request-handler.js";
 
 const server = http.createServer();
 
@@ -19,8 +20,11 @@ const addRequestHandlers = (server) => {
   const createUserRequesHandler = new CreateUserRequestHanlder(
     deleteUserRequestHandler
   );
-  const getUsersRequestHanlder = new GetUsersRequestHanlder(
+  const updateUserRequestHanlder = new UpdateUserRequestHanlder(
     createUserRequesHandler
+  );
+  const getUsersRequestHanlder = new GetUsersRequestHanlder(
+    updateUserRequestHanlder
   );
 
   const requestHandlers = new GetUserByIdRequestHanlder(getUsersRequestHanlder);

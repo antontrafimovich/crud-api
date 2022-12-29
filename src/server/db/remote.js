@@ -79,20 +79,21 @@ class RemoteDbSegment {
     });
   }
 
-  update(record) {
+  update(id, record) {
     return new Promise((resolve, reject) => {
-      const request = http.request(`${this._url}/${this._name}/${record.id}`, {
+      const request = http.request(`${this._url}/${this._name}/${id}`, {
         method: "PUT",
       });
 
       request.on("response", async (res) => {
-        if (res.statusCode < 200 && res.statusCode >= 300) {
-          reject("Some error");
-        }
-
         const data = await streamToPromise(res);
 
-        resolve(data);
+        if (res.statusCode === 400 || res.statusCode === 404) {
+          reject({ statusCode: res.statusCode, message: data });
+          return;
+        }
+
+        resolve(JSON.parse(data));
       });
 
       request.write(
