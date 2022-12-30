@@ -1,17 +1,20 @@
 import http from "node:http";
 
-import { streamToPromise } from "../../utils/index.js";
+import { streamToPromise } from "../../utils";
+import { Database, DatabaseSegment } from "../model";
 
-class RemoteDbSegment {
-  _url;
-  _name;
+class RemoteDbSegment<T> extends DatabaseSegment<T> {
+  private _url: string;
+  private _name: string;
 
-  constructor(url, name) {
+  constructor(url: string, name: string) {
+    super();
+
     this._url = url;
     this._name = name;
   }
 
-  getAll() {
+  getAll(): Promise<{ records: (T & { id: string })[] }> {
     return new Promise((resolve, reject) => {
       const request = http.request(`${this._url}/${this._name}`, {
         method: "GET",
@@ -20,7 +23,7 @@ class RemoteDbSegment {
       request.on("response", async (res) => {
         const data = await streamToPromise(res);
 
-        if (res.statusCode === 404 && res.statusCode === 400) {
+        if (res.statusCode === 404 || res.statusCode === 400) {
           reject({ statusCode: res.statusCode, message: data });
         }
 
@@ -31,7 +34,7 @@ class RemoteDbSegment {
     });
   }
 
-  getById(id) {
+  getById(id: string): Promise<{ record: T & { id: string } }> {
     return new Promise((resolve, reject) => {
       const request = http.request(`${this._url}/${this._name}/${id}`, {
         method: "GET",
@@ -52,7 +55,7 @@ class RemoteDbSegment {
     });
   }
 
-  create(record) {
+  create(record: T): Promise<{ record: T & { id: string } }> {
     return new Promise((resolve, reject) => {
       const request = http.request(`${this._url}/${this._name}`, {
         method: "POST",
@@ -79,7 +82,10 @@ class RemoteDbSegment {
     });
   }
 
-  update(id, record) {
+  update(
+    id: string,
+    record: Partial<T>
+  ): Promise<{ record: T & { id: string } }> {
     return new Promise((resolve, reject) => {
       const request = http.request(`${this._url}/${this._name}/${id}`, {
         method: "PUT",
@@ -106,7 +112,7 @@ class RemoteDbSegment {
     });
   }
 
-  delete(id) {
+  delete(id: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const request = http.request(`${this._url}/${this._name}/${id}`, {
         method: "DELETE",
@@ -127,12 +133,15 @@ class RemoteDbSegment {
   }
 }
 
-export class RemoteDb {
-  constructor(url) {
+export class RemoteDb<T> extends Database<T> {
+  private _url: string;
+
+  constructor(url: string) {
+    super();
     this._url = url;
   }
 
-  async getOrCreateSegment(name) {
+  async getOrCreateSegment(name: string): Promise<DatabaseSegment<T>> {
     return new Promise((resolve, reject) => {
       const request = http.request(`${this._url}/segment`, {
         method: "POST",

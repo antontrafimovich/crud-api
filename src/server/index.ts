@@ -1,21 +1,21 @@
 import * as dotenv from "dotenv";
-dotenv.config();
-
-import http from "node:http";
+import { createServer, Server } from "node:http";
 import process from "node:process";
 
 import {
   CreateUserRequestHanlder,
-  GetUsersRequestHanlder,
-  NotExistingRequestsHandler,
   DeleteUserRequestHanlder,
   GetUserByIdRequestHanlder,
-} from "./handlers/index.js";
-import { UpdateUserRequestHanlder } from "./handlers/update-user-request-handler.js";
+  GetUsersRequestHanlder,
+  NotExistingRequestsHandler,
+  UpdateUserRequestHanlder,
+} from "./handlers";
 
-const server = http.createServer();
+dotenv.config();
 
-const addRequestHandlers = (server) => {
+const server = createServer();
+
+const addRequestHandlers = (server: Server) => {
   const notExistingRequestHandler = new NotExistingRequestsHandler();
   const deleteUserRequestHandler = new DeleteUserRequestHanlder(
     notExistingRequestHandler

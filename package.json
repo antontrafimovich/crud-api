@@ -1,13 +1,12 @@
 {
   "name": "crud-api",
   "version": "1.0.0",
-  "type": "module",
   "description": "This is repo for rs school's crud api task.",
   "main": "index.js",
   "scripts": {
     "start": "node src/server/index.js",
     "start:dev": "nodemon src/server/index.js",
-    "start:prod": "node src/server/index.js",
+    "start:prod": "webpack && node dist/bundle.js",
     "start:multi": "node src/index.js"
   },
   "repository": {
@@ -22,11 +21,16 @@
   },
   "homepage": "https://github.com/antontrafimovich/crud-api#readme",
   "dependencies": {
+    "@types/uuid": "^9.0.0",
     "dotenv": "^16.0.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "^8.30.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   }
 }

@@ -1,31 +1,32 @@
-import { isValidUid } from "../../utils/index.js";
-import { UserRepository } from "../repositories/user-repository.js";
-import store from "./../store.js";
+import { IncomingMessage, ServerResponse } from "node:http";
 
-let repo;
+import { RequestHandler } from "../../model";
+import { isValidUid } from "../../utils";
+import { UserRepository } from "../repositories/user-repository";
+import store from "../store";
+
+let repo: UserRepository;
 
 store.onUpdate((state) => {
   repo = new UserRepository(state.db);
 });
 
-export class GetUserByIdRequestHanlder {
-  _next;
-
-  constructor(next) {
-    this._next = next;
+export class GetUserByIdRequestHanlder extends RequestHandler {
+  constructor(next: RequestHandler) {
+    super(next);
   }
 
-  async handle(req, res) {
+  async handle(req: IncomingMessage, res: ServerResponse) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 
     if (req.method !== "GET" || !url.pathname.startsWith("/api/users")) {
-      return this._next.handle(req, res);
+      return this.next.handle(req, res);
     }
 
     const [, , id] = url.pathname.slice(1).split("/");
 
     if (!id) {
-      return this._next.handle(req, res);
+      return this.next.handle(req, res);
     }
 
     if (!isValidUid(id)) {

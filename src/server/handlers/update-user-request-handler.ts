@@ -1,25 +1,26 @@
-import { isValidUid, streamToPromise } from "./../../utils/index.js";
-import store from "./../store.js";
-import { UserRepository } from "../repositories/user-repository.js";
+import { IncomingMessage, ServerResponse } from "node:http";
 
-let repo;
+import { RequestHandler } from "../../model";
+import { isValidUid, streamToPromise } from "../../utils";
+import { UserRepository } from "../repositories";
+import store from "../store";
+
+let repo: UserRepository;
 
 store.onUpdate((state) => {
   repo = new UserRepository(state.db);
 });
 
-export class UpdateUserRequestHanlder {
-  _next;
-
-  constructor(next) {
-    this._next = next;
+export class UpdateUserRequestHanlder extends RequestHandler {
+  constructor(next: RequestHandler) {
+    super(next);
   }
 
-  async handle(req, res) {
+  async handle(req: IncomingMessage, res: ServerResponse) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 
     if (!url.pathname.startsWith("/api/users") || req.method !== "PUT") {
-      return this._next.handle(req, res);
+      return this.next.handle(req, res);
     }
 
     const [, , id] = url.pathname.slice(1).split("/");
