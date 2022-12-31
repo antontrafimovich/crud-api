@@ -1,24 +1,22 @@
-import store from "../store.js";
-import { streamToPromise } from "./../../utils/index.js";
+import { IncomingMessage, ServerResponse } from "node:http";
 
-let storage;
+import { RequestHandler } from "../../model/request-handler";
 
-store.onUpdate((state) => {
+import store, { State } from "../store";
+import { streamToPromise } from "../../utils/index";
+
+let storage: State;
+
+store.onUpdate((state: State) => {
   storage = state;
 });
 
-export class CreateRecordRequestHandler {
-  _next;
-
-  constructor(next) {
-    this._next = next;
-  }
-
-  async handle(req, res) {
+export class CreateRecordRequestHandler extends RequestHandler {
+  async handle(req: IncomingMessage, res: ServerResponse) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 
     if (url.pathname.length <= 1 || req.method !== "POST") {
-      return this._next.handle(req, res);
+      return this.next.handle(req, res);
     }
 
     const segment = url.pathname.slice(1);

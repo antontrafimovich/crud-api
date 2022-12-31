@@ -14,10 +14,6 @@ store.onUpdate((state) => {
 const REQUIRED_FIELDS = ["name", "age", "hobbies"];
 
 export class CreateUserRequestHanlder extends RequestHandler {
-  constructor(next: RequestHandler) {
-    super(next);
-  }
-
   async handle(req: IncomingMessage, res: ServerResponse) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 

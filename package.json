@@ -7,7 +7,7 @@
     "start": "node src/server/index.js",
     "start:dev": "nodemon src/server/index.js",
     "start:prod": "webpack && node dist/bundle.js",
-    "start:multi": "node src/index.js"
+    "start:multi": "webpack --entry ./src/index.ts && node dist/bundle.js"
   },
   "repository": {
     "type": "git",

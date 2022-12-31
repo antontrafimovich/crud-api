@@ -1,22 +1,18 @@
-import store from "../store.js";
-import { streamToPromise } from "./../../utils/index.js";
+import { IncomingMessage, ServerResponse } from "node:http";
 
-let storage;
+import { RequestHandler } from "../../model/request-handler";
+import store, { State } from "../store";
 
-store.onUpdate((state) => {
+let storage: State;
+
+store.onUpdate((state: State) => {
   storage = state;
 });
 
-export class DeleteRecordRequestHandler {
-  _next;
-
-  constructor(next) {
-    this._next = next;
-  }
-
-  async handle(req, res) {
+export class DeleteRecordRequestHandler extends RequestHandler {
+  async handle(req: IncomingMessage, res: ServerResponse) {
     if (req.method !== "DELETE") {
-      return this._next.handle(req, res);
+      return this.next.handle(req, res);
     }
 
     const url = new URL(req.url, `http://${req.headers.host}`);
@@ -24,7 +20,7 @@ export class DeleteRecordRequestHandler {
     const parts = url.pathname.slice(1).split("/");
 
     if (parts.length !== 2) {
-      return this._next.handle(req, res);
+      return this.next.handle(req, res);
     }
 
     const [segment, id] = parts;

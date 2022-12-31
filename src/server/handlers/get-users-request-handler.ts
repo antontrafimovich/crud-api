@@ -12,10 +12,6 @@ store.onUpdate((state) => {
 });
 
 export class GetUsersRequestHanlder extends RequestHandler {
-  constructor(next: RequestHandler) {
-    super(next);
-  }
-
   async handle(req: IncomingMessage, res: ServerResponse) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 

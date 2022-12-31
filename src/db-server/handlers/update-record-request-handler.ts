@@ -1,22 +1,19 @@
-import store from "../store.js";
-import { streamToPromise } from "./../../utils/index.js";
+import { IncomingMessage, ServerResponse } from "node:http";
 
-let storage;
+import store, { State } from "../store";
+import { streamToPromise } from "../../utils";
+import { RequestHandler } from "../../model";
 
-store.onUpdate((state) => {
+let storage: State;
+
+store.onUpdate((state: State) => {
   storage = state;
 });
 
-export class UpdateRecordRequestHandler {
-  _next;
-
-  constructor(next) {
-    this._next = next;
-  }
-
-  async handle(req, res) {
+export class UpdateRecordRequestHandler extends RequestHandler {
+  async handle(req: IncomingMessage, res: ServerResponse) {
     if (req.method !== "PUT") {
-      return this._next.handle(req, res);
+      return this.next.handle(req, res);
     }
 
     const url = new URL(req.url, `http://${req.headers.host}`);
@@ -24,7 +21,7 @@ export class UpdateRecordRequestHandler {
     const parts = url.pathname.slice(1).split("/");
 
     if (parts.length !== 2) {
-      return this._next.handle(req, res);
+      return this.next.handle(req, res);
     }
 
     const [segment, id] = parts;

@@ -1,23 +1,20 @@
-import store from "../store.js";
+import { IncomingMessage, ServerResponse } from "node:http";
 
-let storage;
+import { RequestHandler } from "../../model";
+import store, { State } from "../store";
 
-store.onUpdate((state) => {
+let storage: State;
+
+store.onUpdate((state: State) => {
   storage = state;
 });
 
-export class GetAllRecordsRequestHandler {
-  _next;
-
-  constructor(next) {
-    this._next = next;
-  }
-
-  async handle(req, res) {
+export class GetAllRecordsRequestHandler extends RequestHandler {
+  async handle(req: IncomingMessage, res: ServerResponse) {
     const url = new URL(req.url, `http://${req.headers.host}`);
 
     if (url.pathname.length <= 1 || req.method !== "GET") {
-      return this._next.handle(req, res);
+      return this.next.handle(req, res);
     }
 
     const segment = url.pathname.slice(1);

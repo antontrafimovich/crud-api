@@ -16,21 +16,16 @@ dotenv.config();
 const server = createServer();
 
 const addRequestHandlers = (server: Server) => {
-  const notExistingRequestHandler = new NotExistingRequestsHandler();
-  const deleteUserRequestHandler = new DeleteUserRequestHanlder(
-    notExistingRequestHandler
-  );
-  const createUserRequesHandler = new CreateUserRequestHanlder(
-    deleteUserRequestHandler
-  );
-  const updateUserRequestHanlder = new UpdateUserRequestHanlder(
-    createUserRequesHandler
-  );
-  const getUsersRequestHanlder = new GetUsersRequestHanlder(
-    updateUserRequestHanlder
-  );
-
-  const requestHandlers = new GetUserByIdRequestHanlder(getUsersRequestHanlder);
+  const requestHandlers = [
+    new NotExistingRequestsHandler(),
+    new DeleteUserRequestHanlder(),
+    new CreateUserRequestHanlder(),
+    new UpdateUserRequestHanlder(),
+    new GetUsersRequestHanlder(),
+    new GetUserByIdRequestHanlder(),
+  ].reduce((result, handler) => {
+    return handler.setNext(result);
+  }, undefined);
 
   return server.on(
     "request",

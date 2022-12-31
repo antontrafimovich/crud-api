@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import "./db-server/index.js";
+import "./db-server";
 
 import cluster from "node:cluster";
 import http from "node:http";
@@ -9,7 +9,7 @@ import { cpus } from "node:os";
 import path from "node:path";
 import { fileURLToPath, URL } from "node:url";
 
-import { CycledQueue } from "./model/index.js";
+import { CycledQueue } from "./model";
 
 const cpusCount = cpus().length;
 
@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 const queue = new CycledQueue();
 
 cluster.setupPrimary({
-  exec: path.resolve(__dirname, "./server/index.js"),
+  exec: path.resolve(__dirname, "./server"),
 });
 
 const AT_CRUD_API_PORT = Number.parseInt(process.env.AT_CRUD_API_PORT);
