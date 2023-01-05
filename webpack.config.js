@@ -1,9 +1,9 @@
 module.exports = {
   mode: "development",
   target: "node",
-  entry: "./src/server/index.ts",
+  entry: "./src/index.ts",
   output: {
-    filename: "bundle.js",
+    filename: "multi.js",
   },
   resolve: {
     extensions: [".ts"],

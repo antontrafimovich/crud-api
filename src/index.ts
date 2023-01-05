@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 const queue = new CycledQueue();
 
 cluster.setupPrimary({
-  exec: path.resolve(__dirname, "./server"),
+  exec: path.resolve(__dirname, '../', 'dist', "./server.js"),
 });
 
 const AT_CRUD_API_PORT = Number.parseInt(process.env.AT_CRUD_API_PORT);
