@@ -37,12 +37,12 @@ export class CreateUserRequestHanlder extends RequestHandler {
       return;
     }
 
-    const result = await repo.add(userParams);
+    const { record } = await repo.add(userParams);
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
-        data: result,
+        data: record,
       })
     );
   }
