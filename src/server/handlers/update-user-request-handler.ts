@@ -27,9 +27,23 @@ export class UpdateUserRequestHanlder extends RequestHandler {
       return;
     }
 
-    const body = await streamToPromise(req);
+    let body;
+    try {
+      body = await streamToPromise(req);
+    } catch (err) {
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      res.end("An error has occured during processing of request data");
+      return;
+    }
 
-    const newUserData = JSON.parse(body);
+    let newUserData;
+    try {
+      newUserData = JSON.parse(body);
+    } catch (err) {
+      res.writeHead(400, { "Content-Type": "text/plain" });
+      res.end("Invalid JSON format");
+      return;
+    }
 
     try {
       const { record } = await repo.edit(id, newUserData);
