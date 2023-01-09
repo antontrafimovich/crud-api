@@ -24,6 +24,7 @@ export class DeleteUserRequestHanlder extends RequestHandler {
     if (!isValidUid(id)) {
       res.writeHead(400);
       res.end(`${id} is not valid userId`);
+      return;
     }
 
     try {
@@ -31,7 +32,7 @@ export class DeleteUserRequestHanlder extends RequestHandler {
     } catch (err) {
       if (err.statusCode === 404) {
         res.writeHead(404, { "Content-Type": "text/plain" });
-        res.end(`User with id ${id} was not found`);
+        res.end(`User with id ${id} doesn't exist`);
       }
 
       return;
