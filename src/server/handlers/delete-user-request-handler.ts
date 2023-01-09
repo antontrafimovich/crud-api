@@ -21,6 +21,10 @@ export class DeleteUserRequestHanlder extends RequestHandler {
 
     const [, , id] = url.pathname.slice(1).split("/");
 
+    if (!id) {
+      return this.next.handle(req, res);
+    }
+
     if (!isValidUid(id)) {
       res.writeHead(400);
       res.end(`${id} is not valid userId`);
