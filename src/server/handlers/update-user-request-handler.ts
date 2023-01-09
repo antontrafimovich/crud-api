@@ -31,13 +31,20 @@ export class UpdateUserRequestHanlder extends RequestHandler {
 
     const newUserData = JSON.parse(body);
 
-    const { record } = await repo.edit(id, newUserData);
+    try {
+      const { record } = await repo.edit(id, newUserData);
 
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(
-      JSON.stringify({
-        data: record,
-      })
-    );
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(
+        JSON.stringify({
+          data: record,
+        })
+      );
+    } catch (err) {
+      if (err.statusCode === 404) {
+        res.writeHead(err.statusCode, { "Content-Type": "text/plain" });
+        res.end(`User with id ${id} doesn't exist`);
+      }
+    }
   }
 }
