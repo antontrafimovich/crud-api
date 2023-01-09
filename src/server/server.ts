@@ -27,10 +27,10 @@ const addRequestHandlers = (server: Server) => {
     return handler.setNext(result);
   }, undefined);
 
-  return server.on(
-    "request",
-    async (req, res) => await requestHandlers.handle(req, res)
-  );
+  return server.on("request", async (req, res) => {
+    console.log(`Request on http://localhost:${process.env.AT_CRUD_API_PORT}`);
+    await requestHandlers.handle(req, res);
+  });
 };
 
 const startServer = (): Server => {

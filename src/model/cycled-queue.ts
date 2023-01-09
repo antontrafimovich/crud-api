@@ -6,13 +6,13 @@ export class CycledQueue<T> {
   }
 
   pop(): T {
-    const item = this._list.at(-1);
+    const item = this._list[0];
 
     if (item === undefined) {
       return item;
     }
 
-    this._list = [item, ...this._list.slice(0, this._list.length)];
+    this._list = [...this._list.slice(1), item];
 
     return item;
   }
