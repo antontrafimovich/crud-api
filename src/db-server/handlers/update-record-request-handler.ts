@@ -45,7 +45,7 @@ export class UpdateRecordRequestHandler extends RequestHandler {
 
     const newRecord = {
       ...record,
-      newRecordData,
+      ...newRecordData,
       id: record.id,
     };
 
