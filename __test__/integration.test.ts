@@ -51,8 +51,8 @@ describe("GET POST GET_BY_ID PUT DELETE GET_BY_ID Scenario", () => {
     request.write(JSON.stringify(user));
 
     request.on("response", async (res) => {
-      const respsonse = await streamToPromise(res);
-      const { data } = JSON.parse(respsonse);
+      const response = await streamToPromise(res);
+      const { data } = JSON.parse(response);
 
       createdUser = data;
       const { id, ...resultUser } = data;
@@ -103,8 +103,8 @@ describe("GET POST GET_BY_ID PUT DELETE GET_BY_ID Scenario", () => {
     request.write(JSON.stringify(updatedUser));
 
     request.on("response", async (res) => {
-      const respsonse = await streamToPromise(res);
-      const { data } = JSON.parse(respsonse);
+      const response = await streamToPromise(res);
+      const { data } = JSON.parse(response);
 
       expect(res.statusCode).toBe(200);
       expect(data).toStrictEqual(updatedUser);
@@ -123,11 +123,9 @@ describe("GET POST GET_BY_ID PUT DELETE GET_BY_ID Scenario", () => {
     );
 
     request.on("response", async (res) => {
-      const response = await streamToPromise(res);
-      console.log(response);
+      await streamToPromise(res);
 
       expect(res.statusCode).toBe(204);
-      // expect(data).toStrictEqual(updatedUser);
       done();
     });
 
@@ -143,8 +141,7 @@ describe("GET POST GET_BY_ID PUT DELETE GET_BY_ID Scenario", () => {
     );
 
     request.on("response", async (res) => {
-      const response = await streamToPromise(res);
-      console.log(response);
+      await streamToPromise(res);
 
       expect(res.statusCode).toBe(404);
       done();
@@ -171,8 +168,8 @@ describe("POST DELETE GET PUT Scenario", () => {
     request.write(JSON.stringify(user));
 
     request.on("response", async (res) => {
-      const respsonse = await streamToPromise(res);
-      const { data } = JSON.parse(respsonse);
+      const response = await streamToPromise(res);
+      const { data } = JSON.parse(response);
 
       createdUser = data;
       const { id, ...resultUser } = data;
@@ -195,8 +192,7 @@ describe("POST DELETE GET PUT Scenario", () => {
     );
 
     request.on("response", async (res) => {
-      const response = await streamToPromise(res);
-      console.log(response);
+      await streamToPromise(res);
 
       expect(res.statusCode).toBe(204);
       done();
@@ -270,8 +266,8 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
     request.write(JSON.stringify(user));
 
     request.on("response", async (res) => {
-      const respsonse = await streamToPromise(res);
-      const { data } = JSON.parse(respsonse);
+      const response = await streamToPromise(res);
+      const { data } = JSON.parse(response);
 
       createdUser = data;
       const { id, ...resultUser } = data;
@@ -342,8 +338,8 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
     request.write(JSON.stringify(updatedUser));
 
     request.on("response", async (res) => {
-      const respsonse = await streamToPromise(res);
-      const { data } = JSON.parse(respsonse);
+      const response = await streamToPromise(res);
+      const { data } = JSON.parse(response);
 
       expect(res.statusCode).toBe(200);
       expect(data).toStrictEqual(updatedUser);
@@ -382,8 +378,7 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
     );
 
     request.on("response", async (res) => {
-      const response = await streamToPromise(res);
-      console.log(response);
+      await streamToPromise(res);
 
       expect(res.statusCode).toBe(204);
       done();
