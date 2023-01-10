@@ -21,23 +21,6 @@ describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
   let firstUser: User & { id: string };
   let secondUser: User & { id: string };
 
-  // test("Get initial empty list", (done) => {
-  //   const request = http.request("http://localhost:8000/api/users", {
-  //     method: "GET",
-  //   });
-
-  //   request.on("response", async (res) => {
-  //     const response = await streamToPromise(res);
-  //     const { data } = JSON.parse(response);
-
-  //     expect(res.statusCode).toBe(200);
-  //     expect(data.length).toBe(0);
-  //     done();
-  //   });
-
-  //   request.end();
-  // });
-
   test("Create first user", (done) => {
     const request = http.request("http://localhost:8000/api/users", {
       method: "POST",
