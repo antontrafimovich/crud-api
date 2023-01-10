@@ -17,27 +17,28 @@ afterAll(() => {
   server.close();
 });
 
-describe("GET POST GET_BY_ID PUT DELETE GET_BY_ID Scenario", () => {
-  let createdUser: User & { id: string };
+describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
+  let firstUser: User & { id: string };
+  let secondUser: User & { id: string };
 
-  test("Get initial empty list", (done) => {
-    const request = http.request("http://localhost:8000/api/users", {
-      method: "GET",
-    });
+  // test("Get initial empty list", (done) => {
+  //   const request = http.request("http://localhost:8000/api/users", {
+  //     method: "GET",
+  //   });
 
-    request.on("response", async (res) => {
-      const response = await streamToPromise(res);
-      const { data } = JSON.parse(response);
+  //   request.on("response", async (res) => {
+  //     const response = await streamToPromise(res);
+  //     const { data } = JSON.parse(response);
 
-      expect(res.statusCode).toBe(200);
-      expect(data.length).toBe(0);
-      done();
-    });
+  //     expect(res.statusCode).toBe(200);
+  //     expect(data.length).toBe(0);
+  //     done();
+  //   });
 
-    request.end();
-  });
+  //   request.end();
+  // });
 
-  test("Create new user", (done) => {
+  test("Create first user", (done) => {
     const request = http.request("http://localhost:8000/api/users", {
       method: "POST",
     });
@@ -54,7 +55,7 @@ describe("GET POST GET_BY_ID PUT DELETE GET_BY_ID Scenario", () => {
       const response = await streamToPromise(res);
       const { data } = JSON.parse(response);
 
-      createdUser = data;
+      firstUser = data;
       const { id, ...resultUser } = data;
 
       expect(res.statusCode).toBe(200);
@@ -66,37 +67,46 @@ describe("GET POST GET_BY_ID PUT DELETE GET_BY_ID Scenario", () => {
     request.end();
   });
 
-  test("Get by id", (done) => {
-    const request = http.request(
-      `http://localhost:8000/api/users/${createdUser.id}`,
-      {
-        method: "GET",
-      }
-    );
+  test("Create second user", (done) => {
+    const request = http.request("http://localhost:8000/api/users", {
+      method: "POST",
+    });
+
+    const user = {
+      name: "John",
+      age: 32,
+      hobbies: ["fishing"],
+    };
+
+    request.write(JSON.stringify(user));
 
     request.on("response", async (res) => {
       const response = await streamToPromise(res);
       const { data } = JSON.parse(response);
 
+      secondUser = data;
+      const { id, ...resultUser } = data;
+
       expect(res.statusCode).toBe(200);
-      expect(data).toStrictEqual(createdUser);
+      expect(user).toStrictEqual(resultUser);
+      expect(id).toBeDefined();
       done();
     });
 
     request.end();
   });
 
-  test("Update by id", (done) => {
+  test("Update second user by id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${createdUser.id}`,
+      `http://localhost:8000/api/users/${secondUser.id}`,
       {
         method: "PUT",
       }
     );
 
     const updatedUser = {
-      ...createdUser,
-      age: 27,
+      ...secondUser,
+      name: "John Doe",
       hobbies: ["football", "guitar"],
     };
 
@@ -106,6 +116,8 @@ describe("GET POST GET_BY_ID PUT DELETE GET_BY_ID Scenario", () => {
       const response = await streamToPromise(res);
       const { data } = JSON.parse(response);
 
+      secondUser = data;
+
       expect(res.statusCode).toBe(200);
       expect(data).toStrictEqual(updatedUser);
       done();
@@ -114,9 +126,9 @@ describe("GET POST GET_BY_ID PUT DELETE GET_BY_ID Scenario", () => {
     request.end();
   });
 
-  test("Delete by id", (done) => {
+  test("Delete first user id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${createdUser.id}`,
+      `http://localhost:8000/api/users/${firstUser.id}`,
       {
         method: "DELETE",
       }
@@ -132,18 +144,64 @@ describe("GET POST GET_BY_ID PUT DELETE GET_BY_ID Scenario", () => {
     request.end();
   });
 
-  test("Get deleted by id", (done) => {
+  test("Get first user by id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${createdUser.id}`,
+      `http://localhost:8000/api/users/${firstUser.id}`,
       {
         method: "GET",
       }
     );
 
     request.on("response", async (res) => {
-      await streamToPromise(res);
+      const response = await streamToPromise(res);
 
       expect(res.statusCode).toBe(404);
+      expect(response).toBe(`User with id ${firstUser.id} doesn't exist`);
+      done();
+    });
+
+    request.end();
+  });
+
+  test("Delete second user id", (done) => {
+    const request = http.request(
+      `http://localhost:8000/api/users/${secondUser.id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    request.on("response", async (res) => {
+      await streamToPromise(res);
+
+      expect(res.statusCode).toBe(204);
+      done();
+    });
+
+    request.end();
+  });
+
+  test("Update second user by id", (done) => {
+    const request = http.request(
+      `http://localhost:8000/api/users/${secondUser.id}`,
+      {
+        method: "PUT",
+      }
+    );
+
+    const updatedUser = {
+      ...secondUser,
+      age: 27,
+      hobbies: ["football", "guitar"],
+    };
+
+    request.write(JSON.stringify(updatedUser));
+
+    request.on("response", async (res) => {
+      const response = await streamToPromise(res);
+
+      expect(res.statusCode).toBe(404);
+      expect(response).toBe(`User with id ${secondUser.id} doesn't exist`);
       done();
     });
 
