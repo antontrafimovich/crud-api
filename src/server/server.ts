@@ -1,4 +1,3 @@
-import * as dotenv from "dotenv";
 import { createServer, Server } from "node:http";
 import process from "node:process";
 
@@ -10,10 +9,6 @@ import {
   NotExistingRequestsHandler,
   UpdateUserRequestHanlder,
 } from "./handlers";
-
-dotenv.config();
-
-const server = createServer();
 
 const addRequestHandlers = (server: Server) => {
   const requestHandlers = [
@@ -39,12 +34,4 @@ const addRequestHandlers = (server: Server) => {
   });
 };
 
-const startServer = (): Server => {
-  return addRequestHandlers(server)
-    .listen(process.env.AT_CRUD_API_PORT, () => {
-      console.log(`Server's listening ${process.env.AT_CRUD_API_PORT} port`);
-    })
-    .on("error", console.log);
-};
-
-export { startServer };
+export const server = addRequestHandlers(createServer());
