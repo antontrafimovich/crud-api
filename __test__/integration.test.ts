@@ -40,7 +40,7 @@ describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
       firstUser = data;
       const { id, ...resultUser } = data;
 
-      expect(res.statusCode).toBe(200);
+      expect(res.statusCode).toBe(201);
       expect(user).toStrictEqual(resultUser);
       expect(id).toBeDefined();
       done();
@@ -69,7 +69,7 @@ describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
       secondUser = data;
       const { id, ...resultUser } = data;
 
-      expect(res.statusCode).toBe(200);
+      expect(res.statusCode).toBe(201);
       expect(user).toStrictEqual(resultUser);
       expect(id).toBeDefined();
       done();
@@ -214,7 +214,7 @@ describe("POST DELETE GET PUT Scenario", () => {
       createdUser = data;
       const { id, ...resultUser } = data;
 
-      expect(res.statusCode).toBe(200);
+      expect(res.statusCode).toBe(201);
       expect(user).toStrictEqual(resultUser);
       expect(id).toBeDefined();
       done();
@@ -312,7 +312,7 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
       createdUser = data;
       const { id, ...resultUser } = data;
 
-      expect(res.statusCode).toBe(200);
+      expect(res.statusCode).toBe(201);
       expect(user).toStrictEqual(resultUser);
       expect(id).toBeDefined();
       done();

@@ -56,7 +56,7 @@ export class CreateUserRequestHanlder extends RequestHandler {
 
     const { record } = await repo.add({ name, age, hobbies });
 
-    res.writeHead(200, { "Content-Type": "application/json" });
+    res.writeHead(201, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify({
         data: record,

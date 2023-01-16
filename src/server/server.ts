@@ -23,8 +23,6 @@ const addRequestHandlers = (server: Server) => {
   }, undefined);
 
   return server.on("request", async (req, res) => {
-    console.log(`Request to http://localhost:${process.env.AT_CRUD_API_PORT}`);
-
     try {
       await requestHandlers.handle(req, res);
     } catch {
