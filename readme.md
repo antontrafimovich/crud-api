@@ -3,7 +3,7 @@ This project contains simple CRUD API with in-memory database underneath
 
 ### Download
 To download this application run the command
-https://github.com/antontrafimovich/crud-api.git
+`git clone https://github.com/antontrafimovich/crud-api.git`
 then switch to the `dev` branch
 
 
