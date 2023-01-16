@@ -1,5 +1,4 @@
 import { createServer, Server } from "node:http";
-import process from "node:process";
 
 import {
   CreateUserRequestHanlder,
@@ -23,8 +22,6 @@ const addRequestHandlers = (server: Server) => {
   }, undefined);
 
   return server.on("request", async (req, res) => {
-    console.log(`Request to http://localhost:${process.env.PORT}`);
-
     try {
       await requestHandlers.handle(req, res);
     } catch {

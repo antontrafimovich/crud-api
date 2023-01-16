@@ -13,9 +13,7 @@ store.onUpdate((state) => {
 
 export class GetUsersRequestHanlder extends RequestHandler {
   async handle(req: IncomingMessage, res: ServerResponse) {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-
-    if (req.method !== "GET" || url.pathname !== "/api/users") {
+    if (req.method !== "GET" || req.url !== "/api/users") {
       return this.next.handle(req, res);
     }
 

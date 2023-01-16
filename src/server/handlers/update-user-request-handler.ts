@@ -15,13 +15,11 @@ store.onUpdate((state) => {
 
 export class UpdateUserRequestHanlder extends RequestHandler {
   async handle(req: IncomingMessage, res: ServerResponse) {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-
-    if (!url.pathname.startsWith("/api/users") || req.method !== "PUT") {
+    if (!req.url.startsWith("/api/users") || req.method !== "PUT") {
       return this.next.handle(req, res);
     }
 
-    const urlParts = url.pathname.slice(1).split("/");
+    const urlParts = req.url.slice(1).split("/");
 
     if (urlParts.length !== 3) {
       return this.next.handle(req, res);

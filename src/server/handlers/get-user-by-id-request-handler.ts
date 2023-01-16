@@ -13,13 +13,11 @@ store.onUpdate((state) => {
 
 export class GetUserByIdRequestHanlder extends RequestHandler {
   async handle(req: IncomingMessage, res: ServerResponse) {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-
-    if (req.method !== "GET" || !url.pathname.startsWith("/api/users")) {
+    if (req.method !== "GET" || !req.url.startsWith("/api/users")) {
       return this.next.handle(req, res);
     }
 
-    const urlParts = url.pathname.slice(1).split("/");
+    const urlParts = req.url.slice(1).split("/");
 
     if (urlParts.length !== 3) {
       return this.next.handle(req, res);
