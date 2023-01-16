@@ -14,8 +14,6 @@ store.onUpdate((state) => {
   repo = new UserRepository(state.db);
 });
 
-const REQUIRED_FIELDS = ["name", "age", "hobbies"];
-
 export class CreateUserRequestHanlder extends RequestHandler {
   async handle(req: IncomingMessage, res: ServerResponse) {
     const url = new URL(req.url, `http://${req.headers.host}`);

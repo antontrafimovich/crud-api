@@ -21,7 +21,17 @@ export class UpdateUserRequestHanlder extends RequestHandler {
       return this.next.handle(req, res);
     }
 
-    const [, , id] = url.pathname.slice(1).split("/");
+    const urlParts = url.pathname.slice(1).split("/");
+
+    if (urlParts.length !== 3) {
+      return this.next.handle(req, res);
+    }
+
+    const [, , id] = urlParts;
+
+    if (!id) {
+      return this.next.handle(req, res);
+    }
 
     if (!isValidUid(id)) {
       res.writeHead(400, { "Content-Type": "text/plain" });

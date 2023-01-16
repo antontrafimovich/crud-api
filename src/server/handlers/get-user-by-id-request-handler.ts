@@ -19,7 +19,13 @@ export class GetUserByIdRequestHanlder extends RequestHandler {
       return this.next.handle(req, res);
     }
 
-    const [, , id] = url.pathname.slice(1).split("/");
+    const urlParts = url.pathname.slice(1).split("/");
+
+    if (urlParts.length !== 3) {
+      return this.next.handle(req, res);
+    }
+
+    const [, , id] = urlParts;
 
     if (!id) {
       return this.next.handle(req, res);
