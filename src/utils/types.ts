@@ -9,3 +9,7 @@ export const isNumber = (v: unknown): v is number => {
 export const isArray = <T = unknown>(v: unknown): v is T[] => {
   return Array.isArray(v);
 };
+
+export const isObject = (v: unknown): v is Record<string, unknown> => {
+  return typeof v === "object" && !isArray(v);
+};

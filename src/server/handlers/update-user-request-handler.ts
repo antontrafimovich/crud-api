@@ -2,8 +2,10 @@ import { IncomingMessage, ServerResponse } from "node:http";
 
 import { RequestHandler } from "../../model";
 import { isValidUid, streamToPromise } from "../../utils";
+import { isString } from "../../utils/types";
 import { UserRepository } from "../repositories";
 import store from "../store";
+import { validate } from "../validator";
 
 let repo: UserRepository;
 
@@ -45,8 +47,18 @@ export class UpdateUserRequestHanlder extends RequestHandler {
       return;
     }
 
+    const validationResult = validate(newUserData);
+
+    if (isString(validationResult)) {
+      res.writeHead(400, { "Content-Type": "text/plain" });
+      res.end(validationResult);
+      return;
+    }
+
+    const { name, age, hobbies } = newUserData;
+
     try {
-      const { record } = await repo.edit(id, newUserData);
+      const { record } = await repo.edit(id, { name, age, hobbies });
 
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(

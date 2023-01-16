@@ -6,6 +6,7 @@ import { isArray, isNumber, isString } from "../../utils/types";
 import { User } from "../model";
 import { UserRepository } from "../repositories/user-repository";
 import store from "../store";
+import { validate } from "../validator";
 
 let repo: UserRepository;
 
@@ -23,72 +24,35 @@ export class CreateUserRequestHanlder extends RequestHandler {
       return this.next.handle(req, res);
     }
 
-    const body = await streamToPromise(req);
+    let body: string;
+    try {
+      body = await streamToPromise(req);
+    } catch {
+      res.writeHead(500, { "Content-Type": "text/plain" });
+      res.end("An error has occured during processing of request data");
+      return;
+    }
+
     let userParams: User;
 
     try {
       userParams = JSON.parse(body);
     } catch {
       res.writeHead(500, { "Content-Type": "text/plain" });
-      res.end("An error has occured during processing of request body. Body must be a JSON.");
+      res.end("Invalid JSON format");
+
+      return;
+    }
+
+    const validationResult = validate(userParams);
+
+    if (isString(validationResult)) {
+      res.writeHead(400, { "Content-Type": "text/plain" });
+      res.end(validationResult);
       return;
     }
 
     const { name, age, hobbies } = userParams;
-
-    const undefinedRequiredFields = REQUIRED_FIELDS.filter(
-      (field) => userParams[field] === undefined
-    );
-
-    if (undefinedRequiredFields.length > 0) {
-      res.writeHead(400, { "Content-Type": "text/plain" });
-      res.end(`Value for ${undefinedRequiredFields} field(s) is mandatory.`);
-      return;
-    }
-
-    const fieldsWithWrongTypes = [];
-
-    if (!isString(name)) {
-      fieldsWithWrongTypes.push("name");
-    }
-
-    if (!isNumber(age)) {
-      fieldsWithWrongTypes.push("age");
-    }
-
-    if (!isArray(hobbies)) {
-      fieldsWithWrongTypes.push("hobbies");
-    }
-
-    if (fieldsWithWrongTypes.length > 0) {
-      res
-        .writeHead(400, { "Content-Type": "text/plain" })
-        .end(
-          `Value for ${fieldsWithWrongTypes.toString()} field(s) has wrong type.`
-        );
-      return;
-    }
-
-    if (name.length <= 1) {
-      res
-        .writeHead(400, { "Content-Type": "text/plain" })
-        .end(`Value for field 'name' should contain > 1 chars.`);
-      return;
-    }
-
-    if (age < 0) {
-      res
-        .writeHead(400, { "Content-Type": "text/plain" })
-        .end(`Value for field 'age' should be positive.`);
-      return;
-    }
-
-    if (hobbies.some((value) => !isString(value))) {
-      res
-        .writeHead(400, { "Content-Type": "text/plain" })
-        .end(`Value for 'hobbies' array item must be a string.`);
-      return;
-    }
 
     const { record } = await repo.add({ name, age, hobbies });
 
