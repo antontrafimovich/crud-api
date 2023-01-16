@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "cross-env NODE_ENV=development webpack -c webpack-server.config.js --watch",
     "start:prod": "cross-env NODE_ENV=production webpack -c webpack-server.config.js && node dist/server.js",
-    "start:multi": "webpack -c webpack-server.config.js && webpack -c webpack-multi.cofnig.js && node dist/multi.js",
+    "start:multi": "webpack -c webpack-server.config.js && webpack -c webpack-multi.config.js && node dist/multi.js",
     "test": "jest"
   },
   "repository": {
