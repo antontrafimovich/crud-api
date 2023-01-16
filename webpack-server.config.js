@@ -3,7 +3,7 @@ const process = require("process");
 const WebpackShellPluginNext = require("webpack-shell-plugin-next");
 
 let plugins = [];
-if (process.env.AT_CRUD_API_BUILD === "dev") {
+if (process.env.NODE_ENV === "development") {
   plugins.push(
     new WebpackShellPluginNext({
       onBuildEnd: {
@@ -15,7 +15,7 @@ if (process.env.AT_CRUD_API_BUILD === "dev") {
 }
 
 module.exports = {
-  mode: "development",
+  mode: process.env.NODE_ENV ?? "development",
   target: "node",
   entry: "./src/server/index.ts",
   output: {
