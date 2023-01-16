@@ -5,6 +5,6 @@ import { server } from "./multi";
 
 dotenv.config();
 
-server.listen(process.env.AT_CRUD_API_PORT, () => {
-  console.log(`Server's listening ${process.env.AT_CRUD_API_PORT} port`);
+server.listen(process.env.PORT, () => {
+  console.log(`Server's listening ${process.env.PORT} port`);
 });

@@ -18,16 +18,16 @@ cluster.setupPrimary({
   exec: path.resolve("dist", "server.js"),
 });
 
-const AT_CRUD_API_PORT = Number.parseInt(process.env.AT_CRUD_API_PORT);
+const PORT = Number.parseInt(process.env.PORT);
 
 const queue = new CycledQueue();
 
 dbServer.listen(1337);
 
 for (let i = 0; i < cpusCount; i++) {
-  const port = AT_CRUD_API_PORT + i + 1;
+  const port = PORT + i + 1;
 
-  cluster.fork({ AT_CRUD_API_PORT: port, AT_DB_URL: "http://localhost:1337" });
+  cluster.fork({ PORT: port, AT_DB_URL: "http://localhost:1337" });
 
   queue.add(port);
 }
