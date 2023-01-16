@@ -18,7 +18,7 @@ cluster.setupPrimary({
   exec: path.resolve("dist", "server.js"),
 });
 
-const PORT = Number.parseInt(process.env.PORT);
+const PORT = Number.parseInt(process.env.PORT ?? "8000");
 
 const queue = new CycledQueue();
 
@@ -32,16 +32,21 @@ for (let i = 0; i < cpusCount; i++) {
   queue.add(port);
 }
 
-export const server = http.createServer((req, res) => {
-  const port = queue.pop();
-  const url = new URL(req.url, `http://localhost:${port}`);
+export const server = http
+  .createServer((req, res) => {
+    const port = queue.pop();
+    const url = new URL(req.url, `http://localhost:${port}`);
 
-  const request = http.request(url, { method: req.method });
+    const request = http.request(url, { method: req.method });
 
-  request.on("response", (response) => {
-    res.writeHead(response.statusCode, response.headers);
-    response.pipe(res);
+    request.on("response", (response) => {
+      res.writeHead(response.statusCode, response.headers);
+      response.pipe(res);
+    });
+
+    req.pipe(request);
+  })
+  .on("close", () => {
+    dbServer.close();
+    cluster.disconnect();
   });
-
-  req.pipe(request);
-});

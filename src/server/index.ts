@@ -4,8 +4,10 @@ import { server } from "./server";
 
 dotenv.config();
 
+const PORT = process.env.PORT ?? 8000;
+
 server
-  .listen(process.env.PORT, () => {
-    console.log(`Server's listening ${process.env.PORT} port`);
+  .listen(PORT, () => {
+    console.log(`Server's listening ${PORT} port`);
   })
   .on("error", console.log);
