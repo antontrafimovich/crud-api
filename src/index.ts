@@ -1,5 +1,3 @@
-import "./db-server";
-
 import * as dotenv from "dotenv";
 import process from "node:process";
 

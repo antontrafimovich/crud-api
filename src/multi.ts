@@ -1,10 +1,12 @@
+import "./db-server";
+
 import * as dotenv from "dotenv";
 import cluster from "node:cluster";
 import http from "node:http";
 import { cpus } from "node:os";
 import path from "node:path";
 import process from "node:process";
-import { fileURLToPath, URL } from "node:url";
+import { URL } from "node:url";
 
 import { CycledQueue } from "./model";
 
@@ -12,11 +14,8 @@ dotenv.config();
 
 const cpusCount = cpus().length;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 cluster.setupPrimary({
-  exec: path.resolve(__dirname, "../", "dist", "server.js"),
+  exec: path.resolve("dist", "server.js"),
 });
 
 const AT_CRUD_API_PORT = Number.parseInt(process.env.AT_CRUD_API_PORT);
