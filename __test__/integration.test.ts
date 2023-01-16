@@ -1,13 +1,12 @@
 import http from "node:http";
 
 import { User } from "../src/server/model";
-import { startServer } from "../src/server/server";
+import { server } from "../src/server/server";
 import { streamToPromise } from "../src/utils";
 
-let server: http.Server;
 beforeAll(() => {
   return new Promise<void>((resolve) => {
-    server = startServer().on("listening", () => {
+    server.listen(8123).on("listening", () => {
       resolve();
     });
   });
@@ -22,7 +21,7 @@ describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
   let secondUser: User & { id: string };
 
   test("Create first user", (done) => {
-    const request = http.request("http://localhost:8000/api/users", {
+    const request = http.request("http://localhost:8123/api/users", {
       method: "POST",
     });
 
@@ -51,7 +50,7 @@ describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
   });
 
   test("Create second user", (done) => {
-    const request = http.request("http://localhost:8000/api/users", {
+    const request = http.request("http://localhost:8123/api/users", {
       method: "POST",
     });
 
@@ -81,7 +80,7 @@ describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
 
   test("Update second user by id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${secondUser.id}`,
+      `http://localhost:8123/api/users/${secondUser.id}`,
       {
         method: "PUT",
       }
@@ -111,7 +110,7 @@ describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
 
   test("Delete first user id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${firstUser.id}`,
+      `http://localhost:8123/api/users/${firstUser.id}`,
       {
         method: "DELETE",
       }
@@ -129,7 +128,7 @@ describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
 
   test("Get first user by id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${firstUser.id}`,
+      `http://localhost:8123/api/users/${firstUser.id}`,
       {
         method: "GET",
       }
@@ -148,7 +147,7 @@ describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
 
   test("Delete second user id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${secondUser.id}`,
+      `http://localhost:8123/api/users/${secondUser.id}`,
       {
         method: "DELETE",
       }
@@ -166,7 +165,7 @@ describe("POST POST PUT DELETE GET_BY_ID DELETE PUT Scenario", () => {
 
   test("Update second user by id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${secondUser.id}`,
+      `http://localhost:8123/api/users/${secondUser.id}`,
       {
         method: "PUT",
       }
@@ -196,7 +195,7 @@ describe("POST DELETE GET PUT Scenario", () => {
   let createdUser: User & { id: string };
 
   test("Create user", (done) => {
-    const request = http.request("http://localhost:8000/api/users", {
+    const request = http.request("http://localhost:8123/api/users", {
       method: "POST",
     });
 
@@ -226,7 +225,7 @@ describe("POST DELETE GET PUT Scenario", () => {
 
   test("Delete user", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${createdUser.id}`,
+      `http://localhost:8123/api/users/${createdUser.id}`,
       {
         method: "DELETE",
       }
@@ -244,7 +243,7 @@ describe("POST DELETE GET PUT Scenario", () => {
 
   test("Get deleted user by id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${createdUser.id}`,
+      `http://localhost:8123/api/users/${createdUser.id}`,
       {
         method: "GET",
       }
@@ -263,7 +262,7 @@ describe("POST DELETE GET PUT Scenario", () => {
 
   test("Update deleted user by id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${createdUser.id}`,
+      `http://localhost:8123/api/users/${createdUser.id}`,
       {
         method: "PUT",
       }
@@ -294,7 +293,7 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
   let updatedUser: User & { id: string };
 
   test("Create first user", (done) => {
-    const request = http.request("http://localhost:8000/api/users", {
+    const request = http.request("http://localhost:8123/api/users", {
       method: "POST",
     });
 
@@ -323,7 +322,7 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
   });
 
   test("Create second user without required param", (done) => {
-    const request = http.request("http://localhost:8000/api/users", {
+    const request = http.request("http://localhost:8123/api/users", {
       method: "POST",
     });
 
@@ -338,7 +337,7 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
       const response = await streamToPromise(res);
 
       expect(res.statusCode).toBe(400);
-      expect(response).toBe(`Value for hobbies param(s) is mandatory`);
+      expect(response).toBe(`Value for hobbies field(s) is mandatory.`);
       done();
     });
 
@@ -346,7 +345,7 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
   });
 
   test("Get all users", (done) => {
-    const request = http.request("http://localhost:8000/api/users", {
+    const request = http.request("http://localhost:8123/api/users", {
       method: "GET",
     });
 
@@ -364,7 +363,7 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
 
   test("Update user by id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${createdUser.id}`,
+      `http://localhost:8123/api/users/${createdUser.id}`,
       {
         method: "PUT",
       }
@@ -392,7 +391,7 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
 
   test("Get updated user by id", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${createdUser.id}`,
+      `http://localhost:8123/api/users/${createdUser.id}`,
       {
         method: "GET",
       }
@@ -412,7 +411,7 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
 
   test("Delete user", (done) => {
     const request = http.request(
-      `http://localhost:8000/api/users/${createdUser.id}`,
+      `http://localhost:8123/api/users/${createdUser.id}`,
       {
         method: "DELETE",
       }
@@ -429,7 +428,7 @@ describe("POST POST GET UPDATE GET_BY_ID DELETE GET Scenario", () => {
   });
 
   test("Get all users", (done) => {
-    const request = http.request("http://localhost:8000/api/users", {
+    const request = http.request("http://localhost:8123/api/users", {
       method: "GET",
     });
 
