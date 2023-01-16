@@ -1,4 +1,4 @@
-import "./db-server";
+import { server as dbServer } from "./db-server";
 
 import * as dotenv from "dotenv";
 import cluster from "node:cluster";
@@ -21,6 +21,8 @@ cluster.setupPrimary({
 const AT_CRUD_API_PORT = Number.parseInt(process.env.AT_CRUD_API_PORT);
 
 const queue = new CycledQueue();
+
+dbServer.listen(1337);
 
 for (let i = 0; i < cpusCount; i++) {
   const port = AT_CRUD_API_PORT + i + 1;

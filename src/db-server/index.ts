@@ -10,8 +10,6 @@ import {
   UpdateRecordRequestHandler,
 } from "./handlers";
 
-const server = createServer();
-
 const addRequestHandlers = (server: Server) => {
   const requestHandlers: RequestHandler = [
     new DeleteRecordRequestHandler(),
@@ -29,6 +27,4 @@ const addRequestHandlers = (server: Server) => {
   });
 };
 
-addRequestHandlers(server).listen(1337, () => {
-  console.log(`DB Server's listening ${1337} port`);
-});
+export const server = addRequestHandlers(createServer());
